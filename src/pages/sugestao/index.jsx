@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import sadFace from "../../../public/sad.png";
@@ -35,139 +35,139 @@ export function Sugestao() {
   ];
 
   const sugestoesDeMelhorias = [
-    {
-      id: 0,
-      text: "Velocidade de atendimento",
-    },
-    {
-      id: 1,
-      text: "Qualidade dos produtos",
-    },
-    {
-      id: 2,
-      text: "Atendimento do vendedor",
-    },
-    {
-      id: 3,
-      text: "Preço",
-    },
-    {
-      id: 4,
-      text: "Condições de pagamento",
-    },
-    {
-      id: 5,
-      text: "Disponibilidade de peças",
-    },
+    { id: 0, text: "Velocidade de atendimento" },
+    { id: 1, text: "Qualidade dos produtos" },
+    { id: 2, text: "Atendimento do vendedor" },
+    { id: 3, text: "Preço" },
+    { id: 4, text: "Condições de pagamento" },
+    { id: 5, text: "Disponibilidade de peças" },
   ];
 
   const [opcoesSelecionadas, setOpcoesSelecionadas] = useState([]);
 
-  const [selected, setSelected] = useState(false);
-
+  // ADICIONAR SUGESTAO
   function addSugestao(id) {
-    // Encontra o item nas sugestões
     const itemParaAdicionar = sugestoesDeMelhorias.find(
       (item) => item.id === id
     );
-
-    // Verifica se o item existe e se já não foi adicionado
     if (
       !itemParaAdicionar ||
       opcoesSelecionadas.some((item) => item.id === id)
     ) {
       return;
     }
-
-    // Adiciona o novo item mantendo os anteriores
     setOpcoesSelecionadas((prev) => [...prev, itemParaAdicionar]);
-    console.log(opcoesSelecionadas)
   }
 
+  // REMOVER SUGESTAO SELECIONADA
   function removeSugestao(id) {
-  setOpcoesSelecionadas(prev => {
-    const existe = prev.some(item => item.id === id);
-    return existe ? prev.filter(item => item.id !== id) : prev;
-  });
-}
+    setOpcoesSelecionadas((prev) => {
+      const existe = prev.some((item) => item.id === id);
+      return existe ? prev.filter((item) => item.id !== id) : prev;
+    });
+  }
 
-  // function GoToEnd() {
-  //   const navigate = useNavigate();
-  //   navigate("/agradecimento");
-  // }
-
+  //  EXIBIR SUGESTOES
   useEffect(() => {
     async function getDate() {
-      if (!id) {
-        return;
-      }
-
+      if (!id) return;
       setProdutc(dados[id]);
-      console.log(dados[id]);
     }
     getDate();
   }, [id]);
 
   return (
-    <div>
+    <div className="min-h-screen p-4 md:p-8 bg-gray-50">
       {product && (
         <section className="w-full">
-          <div className="w-full max-w-xl mx-auto rounded-lg bg-[#E0E0E0]">
-            <div
-              className={`bg-[#123960] py-3 px-4 mb-4 rounded-t-lg border-b-5 border-[#E15D50]`}
-            >
-              <h1 className="font-bold text-xl text-white">
-                <span className="font-normal text-md italic">
+          {/* Card Principal */}
+          <div className="w-full max-w-4xl mx-auto mb-8 rounded-lg bg-[#E0E0E0] shadow-md">
+            {/* Cabeçalho */}
+            <div className="bg-[#123960] py-3 px-4 md:py-4 md:px-6 mb-4 rounded-t-lg border-b-5 border-[#E15D50]">
+              <h1 className="font-bold text-lg md:text-xl text-white text-center">
+                <span className="font-normal text-md md:text-md italic">
                   {product.title}
                 </span>
               </h1>
             </div>
 
-            <div className="flex px-3 h-full items-center justify-center">
-              <div className="px-4">
-                <Link className="flex flex-col items-center justify-center gap-2 font-medium ">
-                  <div>
-                    <img
-                      src={product.image}
-                      alt="Emoji de avaliação"
-                      className="w-66"
-                    />
-                  </div>
-                  {product.subtitle}
-                </Link>
+            {/* Conteúdo */}
+            <div className="flex flex-col md:flex-row px-3 md:px-6">
+              {/* Emoji e Subtítulo */}
+              <div className="w-full md:w-1/4 flex flex-col items-center justify-center p-4">
+                <div className="flex flex-col items-center gap-2 font-medium">
+                  <img
+                    src={product.image}
+                    alt="Emoji de avaliação"
+                    className="w-16 md:w-24"
+                  />
+                </div>
+                <span className="text-sm md:text-base">{product.subtitle}</span>
               </div>
 
-              <div className="bg-white rounded-md flex flex-wrap gap-5 py-4 justify-center items-center mb-4">
+              {/* Opções de Sugestão */}
+              <div className="w-full md:w-3/4 bg-white rounded-md p-4 grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4 mb-4">
                 {sugestoesDeMelhorias.map((snap) => (
-                  <span
+                  <button
                     key={snap.id}
                     onClick={() => addSugestao(snap.id)}
-                    className={` bg-[#123960] flex items-center justify-center py-2 px-5 rounded-md text-white text-center h-16 w-40 cursor-pointer hover:scale-105 transition-all hover:bg-[#1f6ebd]`}
+                    className="bg-[#123960] flex items-center justify-center py-2 px-2 md:px-4 rounded-md text-white text-xs md:text-sm text-center h-12 md:h-16 w-full cursor-pointer hover:scale-105 transition-all hover:bg-[#1a4b7a]"
                   >
                     {snap.text}
-                  </span>
+                  </button>
                 ))}
               </div>
             </div>
 
-            <div className="w-full flex items-center">
-              <Link to="/agradecimento" className="w-full flex items-center">
-                <button className="bg-[#20643F] text-white font-bold py-3 mb-4 px-6 rounded-lg mx-auto shadow-black-md hover:scale-105 transition-all hover:bg-green-600">
-                  CONFIRMAR
-                </button>
-              </Link>
-            </div>
-
-            <div>
-              <ul>
-                {opcoesSelecionadas && (
-                  <li onClick={() => removeSugestao()}>{opcoesSelecionadas.id}</li>
-                )}
-              </ul>
+            {/* Botão Confirmar */}
+            <div className="w-full p-4">
+              {opcoesSelecionadas.length > 0 ? (
+                <Link
+                  to="/agradecimento"
+                  className="w-full flex justify-center"
+                >
+                  <button className="bg-[#20643F] text-white font-bold py-2 md:py-3 px-6 rounded-lg shadow-md hover:scale-105 transition-all hover:bg-green-600 text-sm md:text-base">
+                    CONFIRMAR
+                  </button>
+                </Link>
+              ) : (
+                <div className="w-full flex justify-center">
+                  <button
+                    className="bg-gray-400 text-white font-bold py-2 md:py-3 px-6 rounded-lg shadow-md text-sm md:text-base cursor-not-allowed"
+                    disabled
+                  >
+                    CONFIRMAR
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </section>
       )}
+
+      {/* Itens Selecionados */}
+      <div className="w-full max-w-4xl mx-auto gap-4 flex flex-col justify-center items-center p-4">
+        <h3
+          className={`${
+            opcoesSelecionadas?.length > 0
+              ? "font-medium text-lg md:text-xl mb-4"
+              : "hidden"
+          }`}
+        >
+          Clique para remover
+        </h3>
+        <div className="w-full grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
+          {opcoesSelecionadas.map((item) => (
+            <button
+              onClick={() => removeSugestao(item.id)}
+              key={item.id}
+              className="bg-[#123960] flex items-center justify-center py-2 px-2 md:px-4 rounded-md text-white text-xs md:text-sm text-center h-12 md:h-16 w-full cursor-pointer hover:scale-105 transition-all hover:bg-red-500"
+            >
+              {item.text}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
